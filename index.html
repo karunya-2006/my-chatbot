@@ -1,0 +1,87 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chatbot</title>
+    
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #e6f2ff;
+    }
+
+    .chatbox {
+        width: 400px;
+        margin: 100px auto;
+        background: #003366; /* Dark blue */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    #chatLog {
+        height: 300px;
+        overflow-y: scroll;
+        background-color: #cce6ff; /* Light blue */
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: #000;
+    }
+
+    input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #5a5a5a;
+    }
+</style>
+
+
+
+
+</head>
+<body>
+    <div class="chatbox">
+        <h2>AI Chatbot</h2>
+        <div id="chatLog"></div>
+        <input type="text" id="userInput" placeholder="Type your message..." onkeypress="if(event.keyCode==13){sendMessage();}">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+     <script>
+    function sendMessage() {
+        var userText = document.getElementById("userInput").value;
+        if (userText.trim() === "") return;
+
+        var chatLog = document.getElementById("chatLog");
+        chatLog.innerHTML += "<div class='user'><b>You:</b> " + userText + "</div>";
+
+        fetch("/get?msg=" + encodeURIComponent(userText))
+            .then(response => response.json())
+            .then(data => {
+                chatLog.innerHTML += "<div class='bot'><b>Bot:</b> " + data + "</div>";
+                document.getElementById("userInput").value = "";
+                chatLog.scrollTop = chatLog.scrollHeight;
+            });
+    }
+</script>
+
+
+
+</body>
+</html>
